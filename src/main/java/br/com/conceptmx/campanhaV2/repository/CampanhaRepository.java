@@ -28,6 +28,13 @@ public interface CampanhaRepository extends PagingAndSortingRepository<Campanha,
     @Query("select c from Campanha c")
     List<Campanha> getTodasCampanhas();
 
+    @ApiOperation(value = "Buscar todas as Campanhasde um Time", response = List.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Retorna uma lista de Campanhas do Time", response = List.class)
+    })
+    @Query("select c from Campanha c where c.time.id = :idTime")
+    List<Campanha> getCampanhasPorTime(@Param("idTime") Long idTime);
+
     @ApiOperation(value = "Salvar uma Campanha", response = Campanha.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Salva uma Campanha e retorna a Campanha salva", response = Campanha.class)
