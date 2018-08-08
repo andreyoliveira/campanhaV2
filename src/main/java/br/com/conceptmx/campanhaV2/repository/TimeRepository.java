@@ -28,13 +28,6 @@ public interface TimeRepository extends PagingAndSortingRepository<Time, Long> {
     @Query("select t from Time t")
     List<Time> getTodosTimes();
 
-    @ApiOperation(value = "Buscar Time por nome", response = Time.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Retorna um Time válido", response = Time.class)
-    })
-    @Query("select t from Time t where t.nome = :nome")
-    List<Time> getPorNome(@Param("nome") String nome);
-
     @ApiOperation(value = "Salvar um Time", response = Time.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Salva um Time e retorna o Time salvo", response = Time.class)

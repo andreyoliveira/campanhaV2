@@ -16,12 +16,13 @@ public interface ClienteRepository extends PagingAndSortingRepository<Cliente, L
     @Query("select c from Cliente c where c.email = :email")
     Cliente getClientePorEmail(@Param("email") String email);
 
-    @Query("select c.campanhas from Cliente c where c.id = :idCliente")
-    List<Campanha> getCampanhasPorCliente(@Param("idCliente") Long idCliente);
-
     @Query("select c.campanhas from Cliente c where c.email = :emailCliente")
     List<Campanha> getCampanhasPorCliente(@Param("emailCliente") String emailCliente);
 
     @Query("select c from Cliente c")
     List<Cliente> getTodosClientes();
+
+    Cliente save(Cliente cliente);
+
+    void deleteById(@Param("id") Long id);
 }
