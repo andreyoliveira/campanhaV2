@@ -3,6 +3,7 @@ package br.com.conceptmx.campanhaV2.service;
 import br.com.conceptmx.campanhaV2.model.Campanha;
 import br.com.conceptmx.campanhaV2.model.Cliente;
 import br.com.conceptmx.campanhaV2.repository.ClienteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/serviceCliente")
 public class ClienteService {
 
+    @Autowired
     private ClienteRepository clienteRepository;
 
     @RequestMapping(value = "/excluir/{id}",
@@ -92,7 +94,7 @@ public class ClienteService {
 
         Cliente c = this.clienteRepository.getClientePorEmail(email);
 
-        return ResponseEntity.status(201).headers(header).body(c);
+        return ResponseEntity.status(200).headers(header).body(c);
     }
 
     @RequestMapping(value = "/getCampanhasPorCliente/{email}",
