@@ -3,11 +3,10 @@ package br.com.conceptmx.campanhaV2.service;
 import br.com.conceptmx.campanhaV2.model.Campanha;
 import br.com.conceptmx.campanhaV2.model.Cliente;
 import br.com.conceptmx.campanhaV2.repository.ClienteRepository;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,15 +16,20 @@ public class ClienteService {
 
     private ClienteRepository clienteRepository;
 
-    @RequestMapping(value = "/excluir",
+    @RequestMapping(value = "/excluir/{id}",
             method = RequestMethod.GET,
-            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public void excluir(@RequestBody Long id){
+    public ResponseEntity excluir(@RequestBody Long id){
         try{
+
+            HttpHeaders header = new HttpHeaders();
+            header.add("cliente", "cliente");
+
             this.clienteRepository.deleteById(id);
+
+            return ResponseEntity.status(204).headers(header).body(new Cliente());
         } catch (Exception ex){
-            throw ex;
+            return ResponseEntity.status(500).body(null);
         }
     }
 
@@ -33,43 +37,87 @@ public class ClienteService {
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Cliente salvar(@RequestBody Cliente cliente){
+    public ResponseEntity<Cliente> salvar(@RequestBody Cliente cliente){
         try {
-            return this.clienteRepository.save(cliente);
+
+            HttpHeaders header = new HttpHeaders();
+            header.add("cliente", "cliente");
+
+            Cliente c = this.clienteRepository.save(cliente);
+
+            return ResponseEntity.status(201).headers(header).body(c);
         } catch (Exception ex){
-            throw ex;
+            return ResponseEntity.status(500).body(null);
         }
     }
 
-    @RequestMapping(value = "/getPorId",
-            method = RequestMethod.GET,
+    @RequestMapping(value = "/alterar",
+            method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Cliente getClientePorId(@RequestBody Long id){
-        return this.clienteRepository.getClientePorId(id);
+    public ResponseEntity<Cliente> alterar(@RequestBody Cliente cliente){
+        try {
+
+            HttpHeaders header = new HttpHeaders();
+            header.add("cliente", "cliente");
+
+            Cliente c = this.clienteRepository.save(cliente);
+
+            return ResponseEntity.status(201).headers(header).body(c);
+        } catch (Exception ex){
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
-    @RequestMapping(value = "/getPorEmail",
+    @RequestMapping(value = "/getPorId/{id}",
             method = RequestMethod.GET,
-            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Cliente getClientePorEmail(@RequestBody String email){
-        return this.clienteRepository.getClientePorEmail(email);
+    public ResponseEntity<Cliente> getClientePorId(@PathVariable Long id){
+
+        HttpHeaders header = new HttpHeaders();
+        header.add("cliente", "cliente");
+
+        Cliente c = this.clienteRepository.getClientePorId(id);
+
+        return ResponseEntity.status(201).headers(header).body(c);
     }
 
-    @RequestMapping(value = "/getCampanhasPorCliente",
+    @RequestMapping(value = "/getPorEmail/{email}",
             method = RequestMethod.GET,
-            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Campanha> getCampanhasPorCliente(@RequestBody String email){
-        return this.clienteRepository.getCampanhasPorCliente(email);
+    public ResponseEntity<Cliente> getClientePorEmail(@PathVariable String email){
+
+        HttpHeaders header = new HttpHeaders();
+        header.add("cliente", "cliente");
+
+        Cliente c = this.clienteRepository.getClientePorEmail(email);
+
+        return ResponseEntity.status(201).headers(header).body(c);
+    }
+
+    @RequestMapping(value = "/getCampanhasPorCliente/{email}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<Campanha>> getCampanhasPorCliente(@PathVariable String email){
+
+        HttpHeaders header = new HttpHeaders();
+        header.add("cliente", "cliente");
+
+        List<Campanha> campanhas = this.clienteRepository.getCampanhasPorCliente(email);
+
+        return ResponseEntity.status(201).headers(header).body(campanhas);
     }
 
     @RequestMapping(value = "/getTodosClientes",
             method = RequestMethod.GET,
-            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Cliente> getTodosClientes(){
-        return this.clienteRepository.getTodosClientes();
+    public ResponseEntity<List<Cliente>> getTodosClientes(){
+
+        HttpHeaders header = new HttpHeaders();
+        header.add("cliente", "cliente");
+
+        List<Cliente> clientes = this.clienteRepository.getTodosClientes();
+
+        return ResponseEntity.status(201).headers(header).body(clientes);
     }
 }
